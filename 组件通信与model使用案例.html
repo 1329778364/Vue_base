@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- 子组件中修改的数据 然后反向传回父组件 -->
+<div id="app">
+    <cpn :number1="num1" :number2="num2" @changenum1="changenumber1" @changenum2="changenumber2"></cpn>
+</div>
+
+<template id="cpn">
+    <div>
+        <h1>props {{number1}}</h1>
+        <h1>data {{dnumber1}}</h1>
+        <!--model 绑定data 中的数据 -->
+        <!--<input type="text" v-model="dnumber1" />--><!--利用model实现对数据的更改-->
+        <input type="text" :value="dnumber1" @input="number1Change" />
+        <h1>{{number2}}</h1>
+        <h1>data {{dnumber2}}</h1>
+        <!--<input type="text" v-model="dnumber2" />-->
+        <input type="text" :value="dnumber2" @input="number2Change" />
+    </div>
+</template>
+
+<script src="vue.js"></script>
+<script>
+    /*定义子组件*/
+    const cpn = {
+        template:"#cpn",
+        props:{ /* 这里props的作用是父组件向子组件传递数据 希望的是父组件修改数据
+                   而不是子组件修改数据 ， 所以我们在子组件中使用model进行双向数据绑定的时候不要直接
+                   绑定到number1,number2 使用data或者计算属性代替*/
+          number1:Number,
+          number2:Number
+        },
+        data() { /* 将数据做一个中转到data */
+            return {
+                dnumber1:this.number1,
+                dnumber2:this.number2
+            }
+        },
+        methods:{
+            number1Change(event){
+                /*1. 将input 数据中的value值绑定到dnumber中*/
+                this.dnumber1 = event.target.value;
+                /*2. 为了修改父组件的值 然后利用emit将事件传回*/
+                this.$emit("changenum1", this.dnumber1)
+                /*3. 同时希望修dnumber2的值  */
+                this.dnumber2 = this.dnumber1*100;
+                this.$emit("changenum2", this.dnumber2)
+            },
+            number2Change(event){
+                this.dnumber2 = event.target.value;
+                this.$emit("changenum2", this.dnumber2);
+                this.dnumber1 = this.dnumber2 / 100;
+                this.$emit("changenum1", this.dnumber1);
+            }
+        }
+
+    }
+
+    /*直接将vue实例看做是父组件 目标就是父组件传数据到子组件进行显示，
+      同时利用model能够实时对子组件的数据进行更改*/
+    const app = new Vue({
+        el:"#app",
+        data:{
+            num1:10,
+            num2:20
+        },
+        methods:{
+          changenumber1(res){
+              console.log(res)
+              /* 注意这传回来的是字符床 与我们定义的number类型是不一致的 */
+              this.num1 = parseInt(res)  /*string 转为int */
+          },
+          changenumber2(res){
+              console.log(res)
+              this.num2 = parseInt(res)
+          }
+        },
+        /*注册子组件*/
+        components:{
+            cpn
+        }
+    })
+
+</script>
+
+</body>
+</html>
