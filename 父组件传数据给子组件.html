@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!-- 在这里调用子组件（我们申明的或者引入的组件）-->
+<div id="app">
+    <cpn :cmovies="movies" :cmessage="message"></cpn>
+</div>
+
+<!--定义一个模板 子组件中要使用 父组件传过来的参数 但是这里使用组件自己定义的props参数
+    然后绑定父组件的参数  这里定义模板的目的是使得我们下面的代码变得简便 template处直接引用 #cpn -->
+<template id="cpn">
+    <div>
+        <ul>
+            <li v-for="item in cmovies">{{item}} </li>
+        </ul>
+        <p>{{cmovies}}</p>
+        <h2>{{cmessage}}</h2>
+    </div>
+</template>
+
+<script src="vue.js"></script>
+<script>
+    /*定义子组件*/
+    const cpn = {
+        template:"#cpn",
+        props:["cmovies", "cmessage"], /*组件中要引用的变量名*/
+        data() {
+            return {
+
+            }
+        },
+        methods:{
+
+        }
+
+    }
+    /* 在这列定义组件是全局组件*/
+    /*components:{
+        cpn
+    }*/
+
+    /*直接将vue实例看做是父组件*/
+    const app = new Vue({
+        el:"#app",
+        data:{
+            message:"你好呀",
+            movies:["1111", "22222", "33333"],
+
+        },
+        /*注册子组件*/
+        components:{
+            cpn
+        }
+    })
+
+</script>
+</body>
+</html>

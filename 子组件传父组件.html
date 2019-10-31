@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!--事件和数据的传递方向  子--父 子产生事件 提交 到 父组件(监听子组件) 引发父组件的事件 同时可以传递参数item  -->
+
+<!-- 父组件调用子组件  -->
+<div id="app">
+    <cpn @itemclick="parentClick"></cpn>  <!-- 在这里接受子组件发过来的事件  调用父组件进行处理-->
+</div>
+
+<!-- 子组件模板 -->
+<template id="cpn">
+    <div>
+        <button v-for="item in categories" @click="clickButton(item)">{{item.name}}</button>
+    </div>
+</template>
+
+<script src="vue.js"></script>
+<script>
+
+    const cpn = {
+        template:"#cpn",
+        props:["cmovies", "cmessage"], /*组件中要引用的变量名*/
+        data() {
+            return {
+                categories:[
+                    {id:"a", name:"aaaa"},
+                    {id:"b", name:"bbbb"},
+                    {id:"c", name:"cccc"},
+                    {id:"d", name:"dddd"}
+                ]
+            }
+        },
+        methods:{
+            clickButton(item){
+                console.log(item)
+                this.$emit("itemclick",item) /*子组件发射一个事件 里面参数是事件名称  我们在用的时候 需要绑定的事件就是他*/
+            }                       /* item 传递参数给父组件*/
+        }
+    }
+
+    /*直接将vue实例看做是父组件*/
+    const app = new Vue({
+        el:"#app",
+        data:{
+            message:"你好呀",
+            movies:["1111", "22222", "33333"],
+
+        },
+        /*注册子组件*/
+        components:{
+            cpn
+        },
+        methods: {
+            parentClick(item){
+                console.log("父组件事件。。。。。", item)
+            }
+        }
+    })
+
+</script>
+
+</body>
+</html>
