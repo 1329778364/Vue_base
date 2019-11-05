@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="app">
+    <cpn><input slot="middle" /></cpn>
+</div>
+
+<template id="cpn">
+    <div>
+        <div>我是cpn组件</div>
+        <slot name="left"><i>左边</i></slot>
+        <slot name="middle"><i>中间</i></slot>
+        <slot name="right"><i>右边</i></slot>
+    </div>
+</template>
+
+<script src="vue.js"></script>
+<script>
+
+    /* 子组件 */
+    const cpn = {
+        template: "#cpn",
+        data() {
+            return {}
+        },
+        methods: {}
+    }
+
+    /* 父组件 */
+    const app = new Vue({
+        el: "#app",
+        data: {},
+        methods: {},
+        components: {
+            cpn
+        }
+    })
+
+</script>
+</body>
+</html>

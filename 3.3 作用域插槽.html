@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!-- 由于版本更新暂时不学 -->
+<div id="app">
+    <cpn></cpn>
+    <!--在这里要进行插槽变换展示-->
+    <cpn>
+        <template slot-scop="slot">
+            <span v-for="item in slot.data">{{item}}</span>
+        </template>
+    </cpn>
+</div>
+
+<template id="cpn">
+    <div>
+        <slot :data="planguage">
+            <div v-for="item in planguage">
+                {{item}}
+            </div>
+        </slot>
+    </div>
+</template>
+
+<script src="vue.js"></script>
+<script>
+
+    /* 子组件 */
+    const cpn = {
+        template: "#cpn",
+        data() {
+            return {
+                planguage:["111", "222","333","444"]
+            }
+        },
+        methods: {}
+    };
+
+    /* 父组件 */
+    const app = new Vue({
+        el: "#app",
+        data: {},
+        methods: {},
+        components: {
+            cpn
+        }
+    })
+</script>
+</body>
+</html>
